@@ -13,6 +13,12 @@ const Signup = () => {
             email: '',
             password: ''
         },
+        validationSchema: Yup.object({
+            name: Yup.string().required('Name Required'),
+            lastName: Yup.string().required('Last Name Required'),
+            email: Yup.string().email('Invalid email').required('Email Required'),
+            password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password Required')
+        }),
         onSubmit: values => {
             console.log(values);
         }
@@ -36,8 +42,15 @@ const Signup = () => {
                                 placeholder="Name"
                                 value={formik.values.name}
                                 onChange={formik.handleChange}
-                                 />
+                                onBlur={formik.handleBlur}
+                                />
                         </div>
+                        { formik.touched.name &&  formik.errors.name ? (
+                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                <p className="font-bold">Error!</p>
+                                <p>{formik.errors.name}</p>
+                            </div>
+                        ) : null }
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastName">
                                 Name
@@ -48,8 +61,15 @@ const Signup = () => {
                                 placeholder="lastName"
                                 value={formik.values.lastName}
                                 onChange={formik.handleChange}
-                                 />
+                                onBlur={formik.handleBlur}
+                                />
                         </div>
+                        { formik.touched.lastName && formik.errors.lastName? (
+                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                <p className="font-bold">Error!</p>
+                                <p>{formik.errors.lastName}</p>
+                            </div>
+                        ) : null }
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                                 Email
@@ -60,8 +80,15 @@ const Signup = () => {
                                 placeholder="Email"
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
-                                 />
+                                onBlur={formik.handleBlur}
+                                />
                         </div>
+                        { formik.touched.email && formik.errors.email? (
+                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                <p className="font-bold">Error!</p>
+                                <p>{formik.errors.email}</p>
+                            </div>
+                        ) : null }
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                                 Password
@@ -72,8 +99,15 @@ const Signup = () => {
                                 placeholder="User password"
                                 value={formik.values.password}
                                 onChange={formik.handleChange}
-                                 />
+                                onBlur={formik.handleBlur}
+                                />
                         </div>
+                        { formik.touched.password && formik.errors.password? (
+                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                <p className="font-bold">Error!</p>
+                                <p>{formik.errors.password}</p>
+                            </div>
+                        ) : null }
                         <input
                             type="submit"
                             className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
