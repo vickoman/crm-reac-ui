@@ -2,8 +2,23 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
+import { useMutation, gql } from '@apollo/client';
+
+const MUTATION_CREATE_USER = gql`
+    mutation($input: UserInput!){
+        createUser(input: $input){
+            id
+            name
+            lastName
+            email
+            created_at
+        }
+    }
+`;
 
 const Signup = () => {
+    // Create ew user
+    const [ createUser ] = useMutation(MUTATION_CREATE_USER);
 
     // Validate form
     const formik = useFormik({
@@ -19,10 +34,31 @@ const Signup = () => {
             email: Yup.string().email('Invalid email').required('Email Required'),
             password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password Required')
         }),
-        onSubmit: values => {
-            console.log(values);
+        onSubmit: async values => {
+            const {
+                name,
+                lastName,
+                email,
+                password
+            } = values;
+            try {
+                const data = await createUser({
+                        variables: {
+                            input: {
+                                name,
+                                lastName,
+                                email,
+                                password
+                            }
+                        }
+                    });
+                console.log(data);
+            }catch(error) {
+                console.log(error);
+            }
         }
     });
+
     return (
         <>
         <Layout>
