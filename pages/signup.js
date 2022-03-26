@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
@@ -17,6 +17,8 @@ const MUTATION_CREATE_USER = gql`
 `;
 
 const Signup = () => {
+    // State for message
+    const [ message, saveMessage] = useState(null);
     // Create ew user
     const [ createUser ] = useMutation(MUTATION_CREATE_USER);
 
@@ -54,14 +56,26 @@ const Signup = () => {
                     });
                 console.log(data);
             }catch(error) {
-                console.log(error);
+                saveMessage(error.message.replace('GraphQL error: ', ''));
+                setTimeout(() => {
+                    saveMessage(null);
+                }, 3000)
             }
         }
     });
 
+    const showMessage = () => {
+        return (
+            <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+                <p>{message}</p>
+            </div>
+        )
+    }
+
     return (
         <>
         <Layout>
+            { message && showMessage()}
             <h1 className="text-center text-2xl text-white font-light">Signup</h1>
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-xs">
