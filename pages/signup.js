@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
 import { useMutation, gql } from '@apollo/client';
@@ -21,6 +22,8 @@ const Signup = () => {
     const [ message, saveMessage] = useState(null);
     // Create ew user
     const [ createUser ] = useMutation(MUTATION_CREATE_USER);
+
+    const router = useRouter();
 
     // Validate form
     const formik = useFormik({
@@ -54,7 +57,11 @@ const Signup = () => {
                             }
                         }
                     });
-                console.log(data);
+                saveMessage(`User ${data.data.createUser.name} created successfully`);
+                setTimeout(() => {
+                    saveMessage(null);
+                    router.push('/login');
+                }, 3000);
             }catch(error) {
                 saveMessage(error.message.replace('GraphQL error: ', ''));
                 setTimeout(() => {
