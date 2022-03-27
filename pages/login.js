@@ -88,11 +88,11 @@ const Login  = () => {
                                     />
                             </div>
                             { formik.touched.email &&  formik.errors.email ? (
-                            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                                <p className="font-bold">Error!</p>
-                                <p>{formik.errors.email}</p>
-                            </div>
-                        ) : null }
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error!</p>
+                                    <p>{formik.errors.email}</p>
+                                </div>
+                            ) : null }
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                                     Password
