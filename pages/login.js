@@ -32,8 +32,6 @@ const Login  = () => {
             password: Yup.string().required('Password Required')
         }),
         onSubmit: async values => {
-            console.log(values);
-
             try {
                 const { data } = await auth({
                     variables: {
