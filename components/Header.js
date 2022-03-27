@@ -24,7 +24,6 @@ const Header = () => {
     const {name, lastName} = data.getUser;
 
     const handleLogout = () => {
-        console.log("Clicking...");
         // remove token from localstorage
         localStorage.removeItem('token');
         router.push('/login');
