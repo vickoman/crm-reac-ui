@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
+import { useMutation, gql } from '@apollo/client';
+
+const MUTATION_CREATE_USER = gql`
+    mutation($input: UserInput!){
+        createUser(input: $input){
+            id
+            name
+            lastName
+            email
+            created_at
+        }
+    }
+`;
 
 const Signup = () => {
+    // State for message
+    const [ message, saveMessage] = useState(null);
+    // Create ew user
+    const [ createUser ] = useMutation(MUTATION_CREATE_USER);
+
+    const router = useRouter();
 
     // Validate form
     const formik = useFormik({
@@ -19,13 +39,50 @@ const Signup = () => {
             email: Yup.string().email('Invalid email').required('Email Required'),
             password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password Required')
         }),
-        onSubmit: values => {
-            console.log(values);
+        onSubmit: async values => {
+            const {
+                name,
+                lastName,
+                email,
+                password
+            } = values;
+            try {
+                const data = await createUser({
+                        variables: {
+                            input: {
+                                name,
+                                lastName,
+                                email,
+                                password
+                            }
+                        }
+                    });
+                saveMessage(`User ${data.data.createUser.name} created successfully`);
+                setTimeout(() => {
+                    saveMessage(null);
+                    router.push('/login');
+                }, 3000);
+            }catch(error) {
+                saveMessage(error.message.replace('GraphQL error: ', ''));
+                setTimeout(() => {
+                    saveMessage(null);
+                }, 3000)
+            }
         }
     });
+
+    const showMessage = () => {
+        return (
+            <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+                <p>{message}</p>
+            </div>
+        )
+    }
+
     return (
         <>
         <Layout>
+            { message && showMessage()}
             <h1 className="text-center text-2xl text-white font-light">Signup</h1>
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-xs">
