@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useQuery, gql} from '@apollo/client';
 import Layout from '../../../components/Layout';
 
+const QUERY_GET_CLIENT =  gql`
+    query($id: ID!){
+        getClientById(id: $id){
+            id
+            name
+            lastName
+            company
+            email
+            telephone
+        }
+    }
+`;
 
 const EditClient = () => {
     // State form message
@@ -10,12 +23,21 @@ const EditClient = () => {
     const router = useRouter();
     const { pid } = router.query;
 
-    const showMessage = () => {
+    // Query
+    const { data, loading, error } = useQuery(QUERY_GET_CLIENT,{
+        variables:{
+            id: pid
+        }
+    });
+
+    if(loading) return 'Loading...';
+
+    function showMessage() {
         return (
             <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
                 <p>{message}</p>
             </div>
-        )
+        );
     }
     
     return (
