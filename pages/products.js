@@ -30,8 +30,8 @@ const Home = () => {
       {localStorage.getItem('token') ? (
         <Layout>
           <h1 className="text-2xl text-gray-800">Products</h1>
-           <Link href="clients/add">
-             <a className="bg-blue-800 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-gray-800 uppercase">New Client</a>
+           <Link href="products/add">
+             <a className="bg-blue-800 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-gray-800 uppercase">New Product</a>
           </Link>
 
           <table className="table-auto shadow-md mt-10 w-full w-lg">
